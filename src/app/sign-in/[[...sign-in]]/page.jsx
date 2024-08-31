@@ -9,6 +9,7 @@ export default function Page() {
   const router = useRouter()
   useEffect(()=>{
     if(isSignedIn){
+      
       router.push('/dashboard')
     }
   },[isSignedIn])
