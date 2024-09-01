@@ -1,1 +1,3 @@
-ALTER SYSTEM SET wal_level = logical;
+insert into Text (data,authorId)
+values
+  ('','2lCDNbW76GqyKe5ZBLmBbvUDWPh');

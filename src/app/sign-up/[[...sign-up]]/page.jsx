@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useEffect } from 'react'
@@ -8,13 +7,20 @@ import { useRouter } from 'next/navigation'
 export default function Page() {
   const { isSignedIn } = useUser()
   const router = useRouter()
-  useEffect(()=>{
-    if(isSignedIn){
+
+  useEffect(() => {
+    if (isSignedIn) {
       router.push('/dashboard')
     }
-  },[isSignedIn])
-  if(isSignedIn){
+  }, [isSignedIn])
+
+  if (isSignedIn) {
     return <div>Loading...</div>
   }
-  return <SignUp/>
+
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <SignUp className="relative" />
+    </div>
+  )
 }

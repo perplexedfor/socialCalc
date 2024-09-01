@@ -24,9 +24,8 @@ model User {
 
 model Text {
   id String @id @default(dbgenerated("gen_random_uuid()"))
-  name String
   created_at DateTime @default(now())
-  data Json
+  data Json[]
   author User @relation(fields: [authorId],references:[id])
   authorId String
 }

@@ -16,5 +16,7 @@ export default function Page() {
   if(isSignedIn){
     return <div>Loading...</div>
   }
-  return <SignIn />
+    return (<div className="flex items-center justify-center h-screen">
+              <SignIn className="relative" />
+            </div>)
 }
