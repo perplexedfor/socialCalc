@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# PS:Building a Modern Version of SocialCalc using Node.js, Go or Django.
 
-## Getting Started
+## Team Details
 
-First, run the development server:
+**Team Name:** ANVESHAK
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Team Leader:** [@perplexedfor](https://github.com/perplexedfor)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Team Members:**
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- **MEMBER_1** - 2022UCI8013 - [@perplexedfor](https://github.com/perplexedfor)
+- **MEMBER_2** - 2022UCI6570 - [@JJFIREE](https://github.com/JJFIREE)
+- **MEMBER_3** - 2022UCI7648 - [@samya-23](https://github.com/samya-23)
+- **MEMBER_4** - 2022UCI6590 - [@sushobhit6590](https://github.com/sushobhit6590)
+- **MEMBER_5** - 2022UCI6569 - [@Varshneyharsh-03](https://github.com/Varshneyharsh-03)
+- **MEMBER_6** - 2022UCI6568 - [@harshsaini03](https://github.com/harshsaini03)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+## Tasks Accomplished
 
-To learn more about Next.js, take a look at the following resources:
+- [x] **Task 1:**  Create a modern and intuitive spreadsheet platform that leverages the latest technologies to enhance user experience and collaboration.
+- [x] **Task 2:** Enable multiple users to edit spreadsheets simultaneously, enhancing collaboration and productivity.
+- [x] **Task 3:** Employ a robust backend with PostgreSQL and Prisma to support a large user base and handle high volumes of data.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Technology Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+This project leverages the following technologies:
+Frontend:
+- **[Next.js](WEBSITE):** For enhancing React by providing server-side rendering, static site generation, and built-in routing.
+- **[Tailwind CSS](WEBSITE):** A utility-first CSS framework that allows for rapid and flexible styling without writing custom CSS.
 
-## Deploy on Vercel
+Backend:
+- **[Clerk](WEBSITE):** For User authentication and authorization.
+- **[Postgre SQL](WEBSITE):** For Data storage and retrieval.
+- **[Prisma](WEBSITE):** For Database interaction and ORM.
+- **[Supabase](WEBSITE):** For Real-time database features and storage.
+- **[Tanstack Query](WEBSITE):** For Data fetching, caching, and optimization.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Key Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Feature 1:** It can handle HUGE amount of data.
+- **Feature 2:** It allows multiple users to edit spreadsheets simultaneously, enhancing collaboration and productivity.
+
