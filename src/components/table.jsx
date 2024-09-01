@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo, useReducer, useRef } from 'react';
 import csvDownload from 'json-to-csv-export';
 import { updateTextData } from '@/index'
 import { useToast } from "@/components/ui/use-toast"
-
+import deepEqual from 'fast-deep-equal';
 // import './index.css';
 import {
   useReactTable,
@@ -17,7 +17,6 @@ import { FooterCell } from './tables/footercell';
 import { Button } from './ui/button';
 import { Plus } from 'lucide-react';
 import {supabase} from '@/supabase'
-import { debounce } from 'lodash';
 
 const defaultColumn = {
   cell: ({ getValue, row: { index }, column: { id }, table }) => {
@@ -98,17 +97,20 @@ export default function PageTable(params) {
   );
   
   const [columns] = React.useState(() => [...defaultColumns]);
-  const [data, setData] = useState(() => []);
   const refreshData = () => setData(() => []);
   const [columnResizeMode, setColumnResizeMode] = React.useState('onChange');
   const [columnResizeDirection, setColumnResizeDirection] = React.useState('ltr');
   const rerender = useReducer(() => ({}), {})[1];
-
-  // const updatePendingRef = useRef(false);
-
+  const [data, setData] = useState([]);
+  const [initialFetch, setInitialFetch] = useState(true);
+  const skipUpdateRef = useRef(false);
   useEffect(() => {
     const handleUpdate = async () => {
-      // if (!updatePendingRef.current || !Array.isArray(data) || data.length === 0) return;
+      if (initialFetch || skipUpdateRef.current) {
+        skipUpdateRef.current = false;
+        setInitialFetch(false);
+        return;
+      }
   
       console.log('Attempting to update data:', data);
   
@@ -123,62 +125,38 @@ export default function PageTable(params) {
   
       console.log('Formatted data:', formattedData);
       console.log(params.id);
-      updateTextData(params.id,formattedData)
-  //     try {
-  //       const { data: existingData, error: fetchError } = await supabase
-  // .from('Text')
-  // .select('*')
-  // .eq('id', params.id)
-  // .single();
-  //       console.log(existingData);
-        // const { data: updatedData, error } = await supabase
-        //   .from('Text')
-        //   .update({ data: formattedData })
-        //   .eq('id', params.id);
   
-        // if (error) {
-        //   console.error('Supabase error:', error.message);
-        // } else {
-        //   console.log('Data updated successfully:', updatedData);
-        // }
-  
-        // updatePendingRef.current = false;
-      // } catch (error) {
-      //   console.error('Error updating data:', error);
-      //   // updatePendingRef.current = false;
-      // }
+      // Function to update data in the database
+      updateTextData(params.id, formattedData);
     };
+  
     handleUpdate();
-    // const debouncedUpdate = debounce(handleUpdate, 500);
+  }, [data, initialFetch]);
   
-    // if (data.length > 0) {
-    //   updatePendingRef.current = true;
-    //   debouncedUpdate();
-    // }
-  
-    // return () => {
-    //   debouncedUpdate.cancel();
-    // };
-  }, [data]);
-
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase
+      const { data: fetchedData, error } = await supabase
         .from('Text')
         .select('data')
         .eq('id', params.id)
         .single();
-
+  
       if (error) {
         console.error('Error fetching data:', error);
       } else {
-        console.log('Fetched data:', data);
-        setData(data.data);
+        console.log('Fetched data:', fetchedData);
+  
+        if (!deepEqual(fetchedData.data, data)) {
+          skipUpdateRef.current = true; // Skip the next update if it's due to initial fetch
+          setData(fetchedData.data);
+        }
+  
+        setInitialFetch(false);
       }
     };
-
+  
     fetchData();
-
+  
     // Set up real-time listener for the specific row
     const channel = supabase
       .channel('specific-text-changes')
@@ -192,16 +170,118 @@ export default function PageTable(params) {
         },
         (payload) => {
           console.log('Change received!', payload);
-          setData(payload.new.data);
+  
+          if (!deepEqual(payload.new.data, data)) {
+            skipUpdateRef.current = true; // Skip the next update if it's due to real-time sync
+            setData(payload.new.data);
+          }
         }
       )
       .subscribe();
-
+  
     // Cleanup function
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [params.id,supabase]);
+  }, [params.id, supabase]);
+  // const updatePendingRef = useRef(false);
+
+  // useEffect(() => {
+  //   const handleUpdate = async () => {
+  //     // if (!updatePendingRef.current || !Array.isArray(data) || data.length === 0) return;
+  
+  //     console.log('Attempting to update data:', data);
+  
+  //     const formattedData = data.map((row) => ({
+  //       firstName: row.firstName || '',
+  //       lastName: row.lastName || '',
+  //       age: row.age || '',
+  //       visits: row.visits || '',
+  //       progress: row.progress || '',
+  //       status: row.status || '',
+  //     }));
+  
+  //     console.log('Formatted data:', formattedData);
+  //     console.log(params.id);
+  //     updateTextData(params.id,formattedData)
+  // //     try {
+  // //       const { data: existingData, error: fetchError } = await supabase
+  // // .from('Text')
+  // // .select('*')
+  // // .eq('id', params.id)
+  // // .single();
+  // //       console.log(existingData);
+  //       // const { data: updatedData, error } = await supabase
+  //       //   .from('Text')
+  //       //   .update({ data: formattedData })
+  //       //   .eq('id', params.id);
+  
+  //       // if (error) {
+  //       //   console.error('Supabase error:', error.message);
+  //       // } else {
+  //       //   console.log('Data updated successfully:', updatedData);
+  //       // }
+  
+  //       // updatePendingRef.current = false;
+  //     // } catch (error) {
+  //     //   console.error('Error updating data:', error);
+  //     //   // updatePendingRef.current = false;
+  //     // }
+  //   };
+  //   handleUpdate();
+  //   // const debouncedUpdate = debounce(handleUpdate, 500);
+  
+  //   // if (data.length > 0) {
+  //   //   updatePendingRef.current = true;
+  //   //   debouncedUpdate();
+  //   // }
+  
+  //   // return () => {
+  //   //   debouncedUpdate.cancel();
+  //   // };
+  // }, [data]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const { data, error } = await supabase
+  //       .from('Text')
+  //       .select('data')
+  //       .eq('id', params.id)
+  //       .single();
+
+  //     if (error) {
+  //       console.error('Error fetching data:', error);
+  //     } else {
+  //       console.log('Fetched data:', data);
+  //       setData(data.data);
+  //     }
+  //   };
+
+  //   fetchData();
+
+  //   // Set up real-time listener for the specific row
+  //   const channel = supabase
+  //     .channel('specific-text-changes')
+  //     .on(
+  //       'postgres_changes',
+  //       {
+  //         event: 'UPDATE',
+  //         schema: 'public',
+  //         table: 'Text',
+  //         filter: `id=eq.${params.id}`
+  //       },
+  //       (payload) => {
+  //         console.log('Change received!', payload);
+  //         setData(payload.new.data);
+  //       }
+  //     )
+  //     .subscribe();
+
+  //   // Cleanup function
+  //   return () => {
+  //     supabase.removeChannel(channel);
+  //   };
+  // }, [params.id,supabase]);
   const downloadCsv = () => {
     const headers = [
       "firstName",
