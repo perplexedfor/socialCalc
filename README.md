@@ -16,6 +16,14 @@
 - **MEMBER_6** - 2022UCI6568 - [@harshsaini03](https://github.com/harshsaini03)
 
 
+ Project Links
+  
+  Internal Presentation: https://docs.google.com/presentation/d/1im7-f0qEZUwcwxbVLFMa7n9WUVFRm3x9/edit?usp=drive_link&ouid=114323826144538042564&rtpof=true&sd=true
+  Final SIH Presentation: https://docs.google.com/presentation/d/1UR7H5N3fcYr6uLOU1cohGAram72zmSll/edit?usp=drive_link&ouid=114323826144538042564&rtpof=true&sd=true
+  Video Demonstration: https://www.youtube.com/watch?v=KtkEAqFzI_I
+  Live Deployment: social-calc-nu.vercel.app
+  Source Code: https://github.com/perplexedfor/socialCalc
+
 ## Tasks Accomplished
 
 - [x] **Task 1:**  Create a modern and intuitive spreadsheet platform that leverages the latest technologies to enhance user experience and collaboration.
